@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-hint-color: #999999;
+            --tg-theme-link-color: #2481cc;
+            --tg-theme-button-color: #2481cc;
+            --tg-theme-button-text-color: #ffffff;
+            --accent-color: #ff9500;
+            --error-color: #e53935;
+            --success-color: #43a047;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .card-date {
+            color: var(--tg-theme-hint-color);
+            font-size: 12px;
+        }
+
+        .card-content {
+            margin-bottom: 12px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button-secondary {
+            background-color: transparent;
+            color: var(--tg-theme-button-color);
+            border: 1px solid var(--tg-theme-button-color);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--tg-theme-button-color);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .image-upload {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .image-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-add {
+            border: 1px dashed rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .counter {
+            text-align: right;
+            font-size: 12px;
+            color: var(--tg-theme-hint-color);
+            margin-top: 4px;
+        }
+
+        .guarantor-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.02);
+            margin-bottom: 12px;
+        }
+
+        .guarantor-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--tg-theme-button-color);
+        }
+
+        .guarantor-info {
+            flex: 1;
+        }
+
+        .guarantor-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .guarantor-username {
+            color: var(--tg-theme-link-color);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .star {
+            color: #ffd700;
+            margin-right: 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .empty-state-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: rgba(67, 160, 71, 0.1);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(229, 57, 53, 0.1);
+            color: var(--error-color);
+        }
+
+        .image-gallery {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .gallery-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--tg-theme-button-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Mobile Legends Market</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="sell">Продаю</div>
+            <div class="tab" data-tab="buy">Ищу аккаунт</div>
+            <div class="tab" data-tab="guarantors">Гаранты</div>
+        </div>
+
+        <div class="content active" id="sell-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Создать объявление</div>
+                </div>
+                <div class="card-content">
+                    <form id="sell-form">
+                        <div class="form-group">
+                            <label class="form-label">Описание аккаунта</label>
+                            <textarea class="form-control" id="sell-description" placeholder="Опишите свой аккаунт, укажите уровень, скины, героев и другие особенности..." maxlength="1000"></textarea>
+                            <div class="counter"><span id="char-count">0</span>/1000</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Скриншоты (максимум 3)</label>
+                            <div class="image-upload" id="image-upload-container">
+                                <div class="image-preview image-preview-add" id="add-image">
+                                    <span>+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Цена (в рублях)</label>
+                            <input type="number" class="form-control" id="sell-price" placeholder="Укажите цену">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Контакты для связи</label>
+                            <input type="text" class="form-control" id="sell-contact" placeholder="Ваш ник в Telegram">
+                        </div>
+                        <button type="submit" class="button" id="submit-sell">Создать объявление</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Активные объявления</div>
+                </div>
+                <div class="card-content" id="listings-container">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="buy-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Создать запрос на покупку</div>
+                </div>
+                <div class="card-content">
+                    <form id="buy-form">
+                        <div class="form-group">
+                            <label class="form-label">Что вы ищете?</label>
+                            <textarea class="form-control" id="buy-description" placeholder="Опишите какой аккаунт вы хотите приобрести, укажите требования к уровню, скинам, героям и другим особенностям..." maxlength="1000"></textarea>
+                            <div class="counter"><span id="buy-char-count">0</span>/1000</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Бюджет (в рублях)</label>
+                            <input type="number" class="form-control" id="buy-price" placeholder="Укажите максимальную цену">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Контакты для связи</label>
+                            <input type="text" class="form-control" id="buy-contact" placeholder="Ваш ник в Telegram">
+                        </div>
+                        <button type="submit" class="button" id="submit-buy">Создать запрос</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Активные запросы</div>
+                </div>
+                <div class="card-content" id="requests-container">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="guarantors-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Проверенные гаранты</div>
+                </div>
+                <div class="card-content" id="guarantors-container">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+
+        // Переменные для хранения данных
+        let selectedImages = [];
+        let listings = [];
+        let requests = [];
+        let guarantors = [];
+        let currentUser = null;
+
+        // Обработка переключения вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Активация выбранной вкладки
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Показ соответствующего контента
+                document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
+                document.getElementById(`${tabName}-content`).classList.add('active');
+            });
+        });
+
+        // Счетчик символов в описании
+        document.getElementById('sell-description').addEventListener('input', function() {
+            const charCount = this.value.length;
+            document.getElementById('char-count').textContent = charCount;
+            
+            if (charCount > 1000) {
+                this.value = this.value.substring(0, 1000);
+                document.getElementById('char-count').textContent = 1000;
+            }
+        });
+
+        document.getElementById('buy-description').addEventListener('input', function() {
+            const charCount = this.value.length;
+            document.getElementById('buy-char-count').textContent = charCount;
+            
+            if (charCount > 1000) {
+                this.value = this.value.substring(0, 1000);
+                document.getElementById('buy-char-count').textContent = 1000;
+            }
+        });
+
+        // Обработка добавления изображений
+        document.getElementById('add-image').addEventListener('click', function() {
+            if (selectedImages.length >= 3) {
+                showAlert('Максимум 3 изображения', 'error');
+                return;
+            }
+            
+            // Создаем невидимый input для выбора файла
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+            
+            fileInput.click();
+            
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    
+                    if (file.size > 5 * 1024 * 1024) { // 5MB
+                        showAlert('Файл слишком большой. Максимальный размер - 5MB', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const imageData = e.target.result;
+                        addImagePreview(imageData);
+                        selectedImages.push(imageData);
+                        
+                        // Скрываем кнопку добавления, если уже добавлено 3 изображения
+                        if (selectedImages.length >= 3) {
+                            document.getElementById('add-image').style.display = 'none';
+                        }
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+                
+                document.body.removeChild(fileInput);
+            });
+        });
+
+        // Функция добавления предпросмотра изображения
+        function addImagePreview(imageData) {
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-preview';
+            
+            const image = document.createElement('img');
+            image.src = imageData;
+            
+            const removeButton = document.createElement('div');
+            removeButton.className = 'image-preview-remove';
+            removeButton.textContent = '×';
+            
+            removeButton.addEventListener('click', function() {
+                const index = selectedImages.indexOf(imageData);
+                if (index > -1) {
+                    selectedImages.splice(index, 1);
+                }
+                
+                imageContainer.remove();
+                
+                // Показываем кнопку добавления, если изображений меньше 3
+                if (selectedImages.length < 3) {
+                    document.getElementById('add-image').style.display = 'flex';
+                }
+            });
+            
+            imageContainer.appendChild(image);
+            imageContainer.appendChild(removeButton);
+            
+            document.getElementById('image-upload-container').insertBefore(imageContainer, document.getElementById('add-image'));
+        }
+
+        // Обработка формы создания объявления
+        document.getElementById('sell-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('sell-description').value.trim();
+            const price = document.getElementById('sell-price').value.trim();
+            const contact = document.getElementById('sell-contact').value.trim();
+            
+            if (!description) {
+                showAlert('Пожалуйста, добавьте описание аккаунта', 'error');
+                return;
+            }
+            
+            if (!price) {
+                showAlert('Пожалуйста, укажите цену', 'error');
+                return;
+            }
+            
+            if (!contact) {
+                showAlert('Пожалуйста, укажите контакты для связи', 'error');
+                return;
+            }
+            
+            const formData = {
+                action: 'create_listing',
+                text: `${description}\n\nЦена: ${price} руб.\nКонтакты: ${contact}`,
+                images: selectedImages
+            };
+            
+            // Отправка данных в Telegram
+            tg.sendData(JSON.stringify(formData));
+            
+            // Очистка формы
+            document.getElementById('sell-form').reset();
+            document.getElementById('char-count').textContent = '0';
+            selectedImages = [];
+            const imageContainer = document.getElementById('image-upload-container');
+            const imagePreviews = imageContainer.querySelectorAll('.image-preview:not(.image-preview-add)');
+            imagePreviews.forEach(preview => preview.remove());
+            document.getElementById('add-image').style.display = 'flex';
+            
+            showAlert('Объявление отправлено на модерацию', 'success');
+        });
+
+        // Обработка формы создания запроса на покупку
+        document.getElementById('buy-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('buy-description').value.trim();
+            const price = document.getElementById('buy-price').value.trim();
+            const contact = document.getElementById('buy-contact').value.trim();
+            
+            if (!description) {
+                showAlert('Пожалуйста, добавьте описание', 'error');
+                return;
+            }
+            
+            if (!price) {
+                showAlert('Пожалуйста, укажите бюджет', 'error');
+                return;
+            }
+            
+            if (!contact) {
+                showAlert('Пожалуйста, укажите контакты для связи', 'error');
+                return;
+            }
+            
+            const formData = {
+                action: 'create_request',
+                text: `${description}\n\nБюджет: ${price} руб.\nКонтакты: ${contact}`
+            };
+            
+            // Отправка данных в Telegram
+            tg.sendData(JSON.stringify(formData));
+            
+            // Очистка формы
+            document.getElementById('buy-form').reset();
+            document.getElementById('buy-char-count').textContent = '0';
+            
+            showAlert('Запрос успешно создан', 'success');
+        });
+
+        // Функция для отображения уведомлений
+        function showAlert(message, type) {
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert alert-${type}`;
+            alertElement.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertElement, container.firstChild);
+            
+            setTimeout(() => {
+                alertElement.remove();
+            }, 3000);
+        }
+
+        // Функция для отображения объявлений
+        function renderListings(listings) {
+            const container = document.getElementById('listings-container');
+            container.innerHTML = '';
+            
+            if (!listings || listings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-text">Объявления не найдены</div>
+                        <button class="button button-secondary">Создать объявление</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            listings.forEach(listing => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'card-header';
+                
+                const cardTitle = document.createElement('div');
+                cardTitle.className = 'card-title';
+                cardTitle.textContent = `Аккаунт от ${listing.username}`;
+                
+                const cardDate = document.createElement('div');
+                cardDate.className = 'card-date';
+                cardDate.textContent = listing.date;
+                
+                cardHeader.appendChild(cardTitle);
+                cardHeader.appendChild(cardDate);
+                
+                const cardContent = document.createElement('div');
+                cardContent.className = 'card-content';
+                cardContent.textContent = listing.text;
+                
+                if (listing.images && listing.images.length > 0) {
+                    const imageGallery = document.createElement('div');
+                    imageGallery.className = 'image-gallery';
+                    
+                    listing.images.forEach(image => {
+                        const galleryImage = document.createElement('div');
+                        galleryImage.className = 'gallery-image';
+                        
+                        const img = document.createElement('img');
+                        img.src = image;
+                        
+                        galleryImage.appendChild(img);
+                        imageGallery.appendChild(galleryImage);
+                    });
+                    
+                    cardContent.appendChild(imageGallery);
+                }
+                
+                const cardFooter = document.createElement('div');
+                cardFooter.className = 'card-footer';
+                
+                const contactButton = document.createElement('button');
+                contactButton.className = 'button';
+                contactButton.textContent = 'Связаться';
+                
+                cardFooter.appendChild(contactButton);
+                
+                card.appendChild(cardHeader);
+                card.appendChild(cardContent);
+                card.appendChild(cardFooter);
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Функция для отображения запросов на покупку
+        function renderRequests(requests) {
+            const container = document.getElementById('requests-container');
+            container.innerHTML = '';
+            
+            if (!requests || requests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-text">Запросы не найдены</div>
+                        <button class="button button-secondary">Создать запрос</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            requests.forEach(request => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'card-header';
+                
+                const cardTitle = document.createElement('div');
+                cardTitle.className = 'card-title';
+                cardTitle.textContent = `Запрос от ${request.username}`;
+                
+                const cardDate = document.createElement('div');
+                cardDate.className = 'card-date';
+                cardDate.textContent = request.date;
+                
+                cardHeader.appendChild(cardTitle);
+                cardHeader.appendChild(cardDate);
+                
+                const cardContent = document.createElement('div');
+                cardContent.className = 'card-content';
+                cardContent.textContent = request.text;
+                
+                const cardFooter = document.createElement('div');
+                cardFooter.className = 'card-footer';
+                
+                const contactButton = document.createElement('button');
+                contactButton.className = 'button';
+                contactButton.textContent = 'Связаться';
+                
+                cardFooter.appendChild(contactButton);
+                
+                card.appendChild(cardHeader);
+                card.appendChild(cardContent);
+                card.appendChild(cardFooter);
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Функция для отображения гарантов
+        function renderGuarantors(guarantors) {
+            const container = document.getElementById('guarantors-container');
+            container.innerHTML = '';
+            
+            if (!guarantors || guarantors.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛡️</div>
+                        <div class="empty-state-text">Гаранты не найдены</div>
+                        <div class="empty-state-text">Список гарантов скоро будет доступен</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            guarantors.forEach(guarantor => {
+                const card = document.createElement('div');
+                card.className = 'guarantor-card';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'guarantor-avatar';
+                avatar.textContent = guarantor.name.charAt(0);
+                
+                const info = document.createElement('div');
+                info.className = 'guarantor-info';
+                
+                const name = document.createElement('div');
+                name.className = 'guarantor-name';
+                name.textContent = guarantor.name;
+                
+                const username = document.createElement('div');
+                username.className = 'guarantor-username';
+                username.textContent = `@${guarantor.username}`;
+                
+                const rating = document.createElement('div');
+                rating.className = 'rating';
+                
+                // Создаем звезды рейтинга
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('span');
+                    star.className = 'star';
+                    star.textContent = i < guarantor.rating ? '★' : '☆';
+                    rating.appendChild(star);
+                }
+                
+                const contacts = document.createElement('div');
+                contacts.className = 'guarantor-contacts';
+                contacts.textContent = guarantor.contacts;
+                
+                info.appendChild(name);
+                info.appendChild(username);
+                info.appendChild(rating);
+                info.appendChild(contacts);
+                
+                card.appendChild(avatar);
+                card.appendChild(info);
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Функция для загрузки данных (в реальном приложении будут запросы к серверу)
+        function loadData() {
+            // Имитация загрузки данных
+            setTimeout(() => {
+                // Пример тестовых данных
+                listings = [
+                    {
+                        id: '1',
+                        username: 'user123',
+                        date: '2025-03-17',
+                        text: 'Продам аккаунт Mobile Legends. Уровень 120, 80 героев, 35 скинов. Ранг: Мифический 1. Эмблемы: 60+. Без привязки.\n\nЦена: 15000 руб.\nКонтакты: @user123',
+                        images: []
+                    },
+                    {
+                        id: '2',
+                        username: 'gamer456',
+                        date: '2025-03-16',
+                        text: 'Продам аккаунт с редкими скинами. 70 героев,
+                        {
+                        id: '2',
+                        username: 'gamer456',
+                        date: '2025-03-16',
+                        text: 'Продам аккаунт с редкими скинами. 70 героев, 40 скинов включая эпические и легендарные. Ранг: Мифический почет. Эмблемы максимальные.\n\nЦена: 25000 руб.\nКонтакты: @gamer456',
+                        images: []
+                    }
+                ];
+                
+                requests = [
+                    {
+                        id: '1',
+                        username: 'buyer789',
+                        date: '2025-03-18',
+                        text: 'Куплю аккаунт с героями для ранговых игр. Нужны минимум 30 героев и хотя бы 10 скинов. Важно наличие эмблем 50+.\n\nБюджет: 10000 руб.\nКонтакты: @buyer789'
+                    },
+                    {
+                        id: '2',
+                        username: 'mlplayer',
+                        date: '2025-03-15',
+                        text: 'Ищу аккаунт мифического ранга с редкими коллекционными скинами. Готов хорошо заплатить за качественный аккаунт.\n\nБюджет: 30000 руб.\nКонтакты: @mlplayer'
+                    }
+                ];
+                
+                guarantors = [
+                    {
+                        id: '1',
+                        name: 'Алексей',
+                        username: 'alex_guarantor',
+                        rating: 5,
+                        contacts: 'Telegram: @alex_guarantor',
+                        transactions: 183
+                    },
+                    {
+                        id: '2',
+                        name: 'Мария',
+                        username: 'maria_safe',
+                        rating: 4,
+                        contacts: 'Telegram: @maria_safe',
+                        transactions: 95
+                    }
+                ];
+                
+                // Отображаем загруженные данные
+                renderListings(listings);
+                renderRequests(requests);
+                renderGuarantors(guarantors);
+            }, 1000);
+        }
+
+        // Загрузка данных при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            
+            // Проверяем существующего пользователя из Telegram WebApp
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                currentUser = tg.initDataUnsafe.user;
+                // Можно предзаполнить контакты из данных пользователя
+                const userContact = `@${currentUser.username || ''}`;
+                
+                document.getElementById('sell-contact').value = userContact;
+                document.getElementById('buy-contact').value = userContact;
+            }
+        });
+
+        // Обработка нажатия на кнопку контакта в объявлениях и запросах
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('button') && e.target.textContent === 'Связаться') {
+                // Находим родительскую карточку
+                const card = e.target.closest('.card');
+                if (!card) return;
+                
+                // Находим контактную информацию
+                const cardContent = card.querySelector('.card-content');
+                if (!cardContent) return;
+                
+                // Извлекаем контакты (обычно в последней строке)
+                const text = cardContent.textContent;
+                const contactMatch = text.match(/Контакты:\s+(@[\w\d_]+)/i);
+                
+                if (contactMatch && contactMatch[1]) {
+                    // Открываем чат с пользователем в Telegram
+                    const username = contactMatch[1].substring(1); // Удаляем символ @
+                    tg.openTelegramLink(`https://t.me/${username}`);
+                }
+            }
+        });
+
+        // Функция для увеличения изображений при нажатии
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.tagName === 'IMG' && e.target.closest('.gallery-image')) {
+                const img = e.target;
+                const src = img.src;
+                
+                // Создаем модальное окно с изображением
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '1000';
+                
+                const modalImg = document.createElement('img');
+                modalImg.src = src;
+                modalImg.style.maxWidth = '90%';
+                modalImg.style.maxHeight = '90%';
+                modalImg.style.objectFit = 'contain';
+                
+                modal.appendChild(modalImg);
+                document.body.appendChild(modal);
+                
+                // Закрытие модального окна при нажатии
+                modal.addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+            }
+        });
+
+        // Обработка кнопок создания в пустых списках
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('button-secondary')) {
+                const buttonText = e.target.textContent;
+                
+                if (buttonText === 'Создать объявление') {
+                    // Переключаемся на вкладку продажи
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelector('.tab[data-tab="sell"]').classList.add('active');
+                    
+                    document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
+                    document.getElementById('sell-content').classList.add('active');
+                    
+                    // Прокручиваем к форме
+                    document.getElementById('sell-form').scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                if (buttonText === 'Создать запрос') {
+                    // Переключаемся на вкладку покупки
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelector('.tab[data-tab="buy"]').classList.add('active');
+                    
+                    document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
+                    document.getElementById('buy-content').classList.add('active');
+                    
+                    // Прокручиваем к форме
+                    document.getElementById('buy-form').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        // Функция для обновления данных
+        function refreshData() {
+            const listingsContainer = document.getElementById('listings-container');
+            const requestsContainer = document.getElementById('requests-container');
+            const guarantorsContainer = document.getElementById('guarantors-container');
+            
+            // Показываем индикаторы загрузки
+            listingsContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            requestsContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            guarantorsContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            
+            // Загружаем данные заново
+            loadData();
+        }
+
+        // Добавляем кнопку обновления в хедер
+        const header = document.querySelector('.header');
+        const refreshButton = document.createElement('button');
+        refreshButton.className = 'button button-secondary';
+        refreshButton.textContent = 'Обновить';
+        refreshButton.style.padding = '4px 8px';
+        refreshButton.style.fontSize = '12px';
+        
+        refreshButton.addEventListener('click', refreshData);
+        header.appendChild(refreshButton);
+
+        // Функция для обработки входящих сообщений от бота Telegram
+        window.Telegram.WebApp.onEvent('message', function(event) {
+            const message = event.data;
+            
+            if (message && message.action) {
+                switch (message.action) {
+                    case 'listing_created':
+                        showAlert('Объявление успешно создано', 'success');
+                        refreshData();
+                        break;
+                    case 'request_created':
+                        showAlert('Запрос успешно создан', 'success');
+                        refreshData();
+                        break;
+                    case 'error':
+                        showAlert(message.error_message || 'Произошла ошибка', 'error');
+                        break;
+                }
+            }
+        });
+
+        // Обработка получения данных от бота при инициализации
+        if (tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+            try {
+                const startParam = JSON.parse(decodeURIComponent(tg.initDataUnsafe.start_param));
+                
+                if (startParam.action === 'show_listing' && startParam.id) {
+                    // Показываем конкретное объявление
+                    // (здесь будет логика для загрузки и отображения конкретного объявления)
+                }
+                
+                if (startParam.action === 'show_request' && startParam.id) {
+                    // Показываем конкретный запрос
+                    // (здесь будет логика для загрузки и отображения конкретного запроса)
+                }
+            } catch (e) {
+                console.error('Ошибка парсинга start_param', e);
+            }
+        }
+
+        // Функция для валидации цен
+        function validatePrice(input) {
+            let value = input.value.trim();
+            
+            // Удаляем все нецифровые символы
+            value = value.replace(/[^\d]/g, '');
+            
+            // Преобразуем в число
+            const numValue = parseInt(value);
+            
+            // Проверяем диапазон
+            if (numValue < 1) {
+                input.value = '';
+            } else if (numValue > 100000) {
+                input.value = '100000';
+            } else {
+                input.value = numValue.toString();
+            }
+        }
+
+        // Добавляем обработчики валидации для полей цены
+        document.getElementById('sell-price').addEventListener('blur', function() {
+            validatePrice(this);
+        });
+
+        document.getElementById('buy-price').addEventListener('blur', function() {
+            validatePrice(this);
+        });
+
+        // Функция для проверки наличия обновлений
+        function checkForUpdates() {
+            // В реальном приложении здесь был бы запрос к серверу
+            // Имитируем получение новых данных
+            setTimeout(() => {
+                const hasNewListings = Math.random() > 0.7; // 30% шанс новых объявлений
+                const hasNewRequests = Math.random() > 0.8; // 20% шанс новых запросов
+                
+                if (hasNewListings || hasNewRequests) {
+                    refreshData();
+                    
+                    if (hasNewListings) {
+                        showAlert('Доступны новые объявления', 'success');
+                    }
+                    
+                    if (hasNewRequests) {
+                        showAlert('Доступны новые запросы', 'success');
+                    }
+                }
+            }, 30000); // Проверяем каждые 30 секунд
+        }
+
+        // Запускаем периодическую проверку обновлений
+        setInterval(checkForUpdates, 30000);
+    </script>
+</body>
+</html>
