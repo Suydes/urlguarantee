@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends Маркет</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Маркет аккаунтов Mobile Legends</h1>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="selling">Продаю</button>
+            <button class="tab-btn" data-tab="looking">Ищу аккаунт</button>
+            <button class="tab-btn" data-tab="guarantors">Список гарантов</button>
+        </div>
+        
+        <div class="tab-content active" id="selling">
+            <div class="action-btn-container">
+                <button id="add-selling-btn" class="action-btn">Добавить объявление</button>
+            </div>
+            <div id="selling-listings" class="listings-container">
+                <!-- Сюда будут добавляться объявления о продаже -->
+                <div class="loading">Загрузка...</div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="looking">
+            <div class="action-btn-container">
+                <button id="add-looking-btn" class="action-btn">Добавить запрос</button>
+            </div>
+            <div id="looking-listings" class="listings-container">
+                <!-- Сюда будут добавляться запросы на покупку -->
+                <div class="loading">Загрузка...</div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="guarantors">
+            <div id="guarantors-list" class="guarantors-container">
+                <!-- Сюда будут добавляться гаранты -->
+                <div class="loading">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для создания объявления -->
+    <div id="create-listing-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Добавить объявление</h2>
+            
+            <form id="listing-form">
+                <input type="hidden" id="listing-type" value="selling">
+                
+                <div class="form-group">
+                    <label for="listing-title">Заголовок:</label>
+                    <input type="text" id="listing-title" placeholder="Введите заголовок" required maxlength="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="listing-description">Описание:</label>
+                    <textarea id="listing-description" placeholder="Введите описание (максимум 1000 символов)" required maxlength="1000"></textarea>
+                    <div class="char-counter"><span id="char-count">0</span>/1000</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Изображения (максимум 3):</label>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="image-preview-1">
+                            <label for="image-upload-1" class="image-upload-label">+</label>
+                            <input type="file" id="image-upload-1" class="image-upload" accept="image/*">
+                        </div>
+                        <div class="image-preview" id="image-preview-2">
+                            <label for="image-upload-2" class="image-upload-label">+</label>
+                            <input type="file" id="image-upload-2" class="image-upload" accept="image/*">
+                        </div>
+                        <div class="image-preview" id="image-preview-3">
+                            <label for="image-upload-3" class="image-upload-label">+</label>
+                            <input type="file" id="image-upload-3" class="image-upload" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn">Отмена</button>
+                    <button type="submit" class="submit-btn">Опубликовать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для просмотра объявления -->
+    <div id="view-listing-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="view-listing-title"></h2>
+            
+            <div class="listing-images-container" id="view-listing-images">
+                <!-- Сюда будут добавляться изображения -->
+            </div>
+            
+            <div class="listing-details">
+                <p id="view-listing-description"></p>
+                <p class="listing-info">Автор: <span id="view-listing-author"></span></p>
+                <p class="listing-info">Дата: <span id="view-listing-date"></span></p>
+            </div>
+            
+            <div class="listing-actions">
+                <button id="contact-seller-btn" class="action-btn">Связаться с продавцом</button>
+                <button id="delete-listing-btn" class="action-btn danger-btn">Удалить объявление</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
