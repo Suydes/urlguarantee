@@ -6,43 +6,136 @@
     <title>Mobile Legends Маркет</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Маркет аккаунтов Mobile Legends</h1>
+            <h1><i class="fas fa-gamepad"></i> Маркет аккаунтов Mobile Legends</h1>
         </div>
         
         <div class="tabs">
-            <button class="tab-btn active" data-tab="selling">Продаю</button>
-            <button class="tab-btn" data-tab="looking">Ищу аккаунт</button>
-            <button class="tab-btn" data-tab="guarantors">Список гарантов</button>
+            <button class="tab-btn active" data-tab="selling">
+                <i class="fas fa-tag"></i> Продаю
+            </button>
+            <button class="tab-btn" data-tab="looking">
+                <i class="fas fa-search"></i> Ищу аккаунт
+            </button>
+            <button class="tab-btn" data-tab="guarantors">
+                <i class="fas fa-shield-alt"></i> Список гарантов
+            </button>
         </div>
         
         <div class="tab-content active" id="selling">
             <div class="action-btn-container">
-                <button id="add-selling-btn" class="action-btn">Добавить объявление</button>
+                <button id="add-selling-btn" class="action-btn">
+                    <i class="fas fa-plus"></i> Добавить объявление
+                </button>
             </div>
+            
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="selling-search" placeholder="Поиск по ключевым словам...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="filters">
+                    <button class="filter-toggle"><i class="fas fa-filter"></i> Фильтры</button>
+                    <div class="filter-dropdown">
+                        <div class="filter-group">
+                            <h3>Ценовая категория</h3>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" value="0-4999" name="price-filter"> 0 - 4 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="5000-9999" name="price-filter"> 5 000 - 9 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="10000-19999" name="price-filter"> 10 000 - 19 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="20000-39999" name="price-filter"> 20 000 - 39 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="40000+" name="price-filter"> 40 000+ ₽
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="clear-filters-btn">Сбросить</button>
+                            <button class="apply-filters-btn">Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div id="selling-listings" class="listings-container">
                 <!-- Сюда будут добавляться объявления о продаже -->
-                <div class="loading">Загрузка...</div>
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Загрузка...
+                </div>
             </div>
         </div>
         
         <div class="tab-content" id="looking">
             <div class="action-btn-container">
-                <button id="add-looking-btn" class="action-btn">Добавить запрос</button>
+                <button id="add-looking-btn" class="action-btn">
+                    <i class="fas fa-plus"></i> Добавить запрос
+                </button>
             </div>
+            
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="looking-search" placeholder="Поиск по ключевым словам...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="filters">
+                    <button class="filter-toggle"><i class="fas fa-filter"></i> Фильтры</button>
+                    <div class="filter-dropdown">
+                        <div class="filter-group">
+                            <h3>Бюджет</h3>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" value="0-4999" name="budget-filter"> 0 - 4 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="5000-9999" name="budget-filter"> 5 000 - 9 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="10000-19999" name="budget-filter"> 10 000 - 19 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="20000-39999" name="budget-filter"> 20 000 - 39 999 ₽
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="40000+" name="budget-filter"> 40 000+ ₽
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="clear-filters-btn">Сбросить</button>
+                            <button class="apply-filters-btn">Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div id="looking-listings" class="listings-container">
                 <!-- Сюда будут добавляться запросы на покупку -->
-                <div class="loading">Загрузка...</div>
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Загрузка...
+                </div>
             </div>
         </div>
         
         <div class="tab-content" id="guarantors">
             <div id="guarantors-list" class="guarantors-container">
                 <!-- Сюда будут добавляться гаранты -->
-                <div class="loading">Загрузка...</div>
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Загрузка...
+                </div>
             </div>
         </div>
     </div>
@@ -62,32 +155,64 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="account-id">ID аккаунта: <span class="field-required">*</span></label>
+                    <input type="text" id="account-id" placeholder="Введите ID аккаунта (6-11 цифр)" required pattern="[0-9]{6,11}">
+                    <div class="field-hint">ID аккаунта должен содержать от 6 до 11 цифр</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zone-id">Zone ID: <span class="field-required">*</span></label>
+                    <input type="text" id="zone-id" placeholder="Введите Zone ID (4-7 цифр)" required pattern="[0-9]{4,7}">
+                    <div class="field-hint">Zone ID должен содержать от 4 до 7 цифр</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price-input"><span id="price-label">Цена:</span> <span class="field-required">*</span></label>
+                    <div class="price-input-container">
+                        <input type="number" id="price-input" placeholder="Укажите стоимость" min="0" required>
+                        <span class="price-currency">₽</span>
+                    </div>
+                    <div class="field-hint" id="price-hint">Укажите стоимость аккаунта в рублях</div>
+                </div>
+                
+                <div class="form-group">
                     <label for="listing-description">Описание:</label>
                     <textarea id="listing-description" placeholder="Введите описание (максимум 1000 символов)" required maxlength="1000"></textarea>
                     <div class="char-counter"><span id="char-count">0</span>/1000</div>
                 </div>
                 
                 <div class="form-group">
-                    <label>Изображения (максимум 3):</label>
+                    <label>Изображения (максимум 3): <span class="field-optional">рекомендуется</span></label>
+                    <div class="field-hint">Добавление изображений увеличивает шанс продажи</div>
                     <div class="image-upload-container">
                         <div class="image-preview" id="image-preview-1">
-                            <label for="image-upload-1" class="image-upload-label">+</label>
+                            <label for="image-upload-1" class="image-upload-label">
+                                <i class="fas fa-plus"></i>
+                            </label>
                             <input type="file" id="image-upload-1" class="image-upload" accept="image/*">
                         </div>
                         <div class="image-preview" id="image-preview-2">
-                            <label for="image-upload-2" class="image-upload-label">+</label>
+                            <label for="image-upload-2" class="image-upload-label">
+                                <i class="fas fa-plus"></i>
+                            </label>
                             <input type="file" id="image-upload-2" class="image-upload" accept="image/*">
                         </div>
                         <div class="image-preview" id="image-preview-3">
-                            <label for="image-upload-3" class="image-upload-label">+</label>
+                            <label for="image-upload-3" class="image-upload-label">
+                                <i class="fas fa-plus"></i>
+                            </label>
                             <input type="file" id="image-upload-3" class="image-upload" accept="image/*">
                         </div>
                     </div>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="cancel-btn">Отмена</button>
-                    <button type="submit" class="submit-btn">Опубликовать</button>
+                    <button type="button" class="cancel-btn">
+                        <i class="fas fa-times"></i> Отмена
+                    </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check"></i> Опубликовать
+                    </button>
                 </div>
             </form>
         </div>
@@ -99,19 +224,50 @@
             <span class="close">&times;</span>
             <h2 id="view-listing-title"></h2>
             
+            <div class="listing-id-container">
+                <span class="listing-id-label">ID объявления:</span>
+                <span id="view-listing-id" class="listing-id"></span>
+            </div>
+            
+            <div class="account-info">
+                <div class="account-info-item">
+                    <span class="account-info-label">ID аккаунта:</span>
+                    <span id="view-account-id" class="account-info-value"></span>
+                </div>
+                <div class="account-info-item">
+                    <span class="account-info-label">Zone ID:</span>
+                    <span id="view-zone-id" class="account-info-value"></span>
+                </div>
+                <div class="account-info-item account-price">
+                    <span class="account-info-label" id="view-price-label">Цена:</span>
+                    <span id="view-price" class="account-info-value price-value"></span>
+                </div>
+            </div>
+            
             <div class="listing-images-container" id="view-listing-images">
                 <!-- Сюда будут добавляться изображения -->
             </div>
             
             <div class="listing-details">
+                <h3>Описание:</h3>
                 <p id="view-listing-description"></p>
-                <p class="listing-info">Автор: <span id="view-listing-author"></span></p>
-                <p class="listing-info">Дата: <span id="view-listing-date"></span></p>
+                <div class="listing-meta">
+                    <p class="listing-info">
+                        <i class="fas fa-user"></i> Автор: <span id="view-listing-author"></span>
+                    </p>
+                    <p class="listing-info">
+                        <i class="fas fa-calendar-alt"></i> Дата: <span id="view-listing-date"></span>
+                    </p>
+                </div>
             </div>
             
             <div class="listing-actions">
-                <button id="contact-seller-btn" class="action-btn">Связаться с продавцом</button>
-                <button id="delete-listing-btn" class="action-btn danger-btn">Удалить объявление</button>
+                <button id="contact-seller-btn" class="action-btn">
+                    <i class="fas fa-comments"></i> Связаться с продавцом
+                </button>
+                <button id="delete-listing-btn" class="action-btn danger-btn">
+                    <i class="fas fa-trash"></i> Удалить объявление
+                </button>
             </div>
         </div>
     </div>
